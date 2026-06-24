@@ -101,3 +101,17 @@ body {
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
 }
+
+button {
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke, opacity, box-shadow, transform,
+    filter, backdrop-filter;
+  transition-duration: 300ms;
+  transition-timing-function: ease;
+  @apply focus:outline-none;
+  @apply disabled:cursor-not-allowed;
+
+  &:hover:not(:disabled) {
+    transform: scale(1.02);
+  }
+}
