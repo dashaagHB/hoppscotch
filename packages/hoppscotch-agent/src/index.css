@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  button {
+    transition-property: color, background-color, border-color,
+      text-decoration-color, fill, stroke, opacity, box-shadow, transform,
+      filter, backdrop-filter;
+    transition-duration: 300ms;
+    transition-timing-function: ease;
+  }
+
+  button:hover:not(:disabled) {
+    transform: scale(1.02);
+  }
+
+  button:focus {
+    outline: none;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
