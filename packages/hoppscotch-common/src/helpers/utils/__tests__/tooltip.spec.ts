@@ -70,6 +70,21 @@ describe("truncateText", () => {
     expect(result).toContain("\u2026")
   })
 
+  test("returns original emoji-only string when within max length", () => {
+    const emoji = "\u{1F600}\u{1F601}\u{1F602}"
+    expect(truncateText(emoji, 5)).toBe(emoji)
+  })
+
+  test("returns original emoji-only string when exactly at max length", () => {
+    const emoji = "\u{1F600}\u{1F601}\u{1F602}\u{1F603}\u{1F604}"
+    expect(truncateText(emoji, 5)).toBe(emoji)
+  })
+
+  test("truncates emoji-only string and reports correct code-point count", () => {
+    const result = truncateText("\u{1F600}\u{1F601}\u{1F602}\u{1F603}\u{1F604}", 3)
+    expect(result).toBe("\u{1F600}\u{1F601}\u{1F602}\u2026 (truncated, 5 chars)")
+  })
+
   test("handles very long strings (10000+ chars) without error", () => {
     const veryLong = "z".repeat(10000)
     const result = truncateText(veryLong, 100)
