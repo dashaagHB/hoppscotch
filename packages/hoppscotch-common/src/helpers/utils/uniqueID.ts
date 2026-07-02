@@ -1,3 +1,7 @@
+const POSSIBLE =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+
 export const uniqueID = (length = 16) => {
-  return Math.random().toString(36).substring(2, length)
+  const values = crypto.getRandomValues(new Uint8Array(length))
+  return Array.from(values, (x) => POSSIBLE[x % POSSIBLE.length]).join("")
 }
