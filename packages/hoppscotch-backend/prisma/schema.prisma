@@ -112,6 +112,7 @@ model User {
   userCollections      UserCollection[]
   UserEnvironments     UserEnvironment[]
   UserHistory          UserHistory[]
+  Snapshots            Snapshot[]
   userRequests         UserRequest[]
   settings             UserSettings?
   VerificationToken    VerificationToken[]
@@ -158,6 +159,22 @@ model UserHistory {
   isStarred        Boolean
   executedOn       DateTime @default(now()) @db.Timestamptz(3)
   user             User     @relation(fields: [userUid], references: [uid], onDelete: Cascade)
+}
+
+model Snapshot {
+  id           String   @id @default(cuid())
+  userUid      String
+  requestKey   String
+  reqType      ReqType
+  request      Json
+  responseData Json
+  isManual     Boolean  @default(false)
+  createdAt    DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime @updatedAt @db.Timestamptz(3)
+  user         User     @relation(fields: [userUid], references: [uid], onDelete: Cascade)
+
+  @@index([userUid, requestKey, createdAt(sort: Desc)])
+  @@unique([userUid, requestKey, createdAt])
 }
 
 model UserEnvironment {

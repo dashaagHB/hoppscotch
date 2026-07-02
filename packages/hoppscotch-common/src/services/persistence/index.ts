@@ -52,6 +52,17 @@ import {
   translateToNewRESTHistory,
 } from "../../newstore/history"
 
+import {
+  snapshotStore,
+  snapshots$,
+  setSnapshots,
+} from "../../newstore/snapshots"
+
+import {
+  arrayBufferToBase64,
+  base64ToArrayBuffer,
+} from "~/helpers/types/DiffSnapshot"
+
 import { bulkApplyLocalState, localStateStore } from "../../newstore/localstate"
 
 import {
@@ -114,6 +125,7 @@ export const STORE_KEYS = {
   LOCAL_STATE: "localState",
   REST_HISTORY: "restHistory",
   GQL_HISTORY: "gqlHistory",
+  SNAPSHOTS: "snapshots",
   REST_COLLECTIONS: "restCollections",
   GQL_COLLECTIONS: "gqlCollections",
   ENVIRONMENTS: "environments",
@@ -588,6 +600,56 @@ export class PersistenceService extends Service {
     graphqlHistoryStore.subject$.subscribe(async ({ state }) => {
       await Store.set(STORE_NAMESPACE, STORE_KEYS.GQL_HISTORY, state)
     })
+  }
+
+  private serializeSnapshot(s: any) {
+    return {
+      ...s,
+      responseData: {
+        ...s.responseData,
+        body: arrayBufferToBase64(s.responseData.body),
+      },
+    }
+  }
+
+  private deserializeSnapshot(s: any) {
+    return {
+      ...s,
+      createdAt: new Date(s.createdAt),
+      responseData: {
+        ...s.responseData,
+        body: base64ToArrayBuffer(s.responseData.body),
+      },
+    }
+  }
+
+  private async setupSnapshotsPersistence() {
+    const snapshotsResult = await Store.get<any>(
+      STORE_NAMESPACE,
+      STORE_KEYS.SNAPSHOTS
+    )
+
+    try {
+      if (E.isRight(snapshotsResult) && Array.isArray(snapshotsResult.right)) {
+        const snapshots = snapshotsResult.right.map(this.deserializeSnapshot)
+        setSnapshots(snapshots)
+        diag("persistence", `Loaded ${snapshots.length} snapshots from storage`)
+      }
+    } catch (err) {
+      diag("persistence", "Failed to parse stored snapshots", err)
+    }
+
+    // Watch snapshot store and persist changes with debouncing
+    watchDebounced(
+      snapshots$,
+      (snapshots) => {
+        const serializable = snapshots.map(this.serializeSnapshot)
+        Store.set(STORE_NAMESPACE, STORE_KEYS.SNAPSHOTS, serializable)
+      },
+      { debounce: 500 }
+    )
+
+    diag("persistence", "Snapshot persistence watcher initialized")
   }
 
   private async setupRESTCollectionsPersistence() {
@@ -1174,6 +1236,7 @@ export class PersistenceService extends Service {
       this.setupSettingsPersistence(),
       this.setupRESTHistoryPersistence(),
       this.setupGQLHistoryPersistence(),
+      this.setupSnapshotsPersistence(),
       this.setupRESTCollectionsPersistence(),
       this.setupGQLCollectionsPersistence(),
 

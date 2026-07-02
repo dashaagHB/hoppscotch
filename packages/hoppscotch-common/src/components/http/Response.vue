@@ -20,6 +20,7 @@
     @submit="onSaveAsExample"
     @hide-modal="showSaveResponseName = false"
   />
+  <DiffViewerModal />
 </template>
 
 <script setup lang="ts">
@@ -39,6 +40,7 @@ import { useI18n } from "@composables/i18n"
 import { runMutation } from "~/helpers/backend/GQLClient"
 import { UpdateRequestDocument } from "~/helpers/backend/graphql"
 import * as E from "fp-ts/Either"
+import DiffViewerModal from "../diff/DiffViewerModal.vue"
 
 const t = useI18n()
 const toast = useToast()

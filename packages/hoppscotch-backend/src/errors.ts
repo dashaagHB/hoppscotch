@@ -991,3 +991,22 @@ export const PUBLISHED_DOCS_FORBIDDEN_ENVIRONMENT_ACCESS =
  * (PublishedDocsService)
  */
 export const PUBLISHED_DOCS_NOT_FOUND = 'published_docs/not_found';
+
+/**
+ * Snapshot size limit exceeded (>5MB)
+ * (UserSnapshotService)
+ */
+export const SNAPSHOT_SIZE_LIMIT_EXCEEDED = 'snapshot/size_limit_exceeded' as const;
+
+/**
+ * Snapshot limit reached (50 snapshots max)
+ * (UserSnapshotService)
+ */
+export const SNAPSHOT_LIMIT_REACHED = 'snapshot/limit_reached' as const;
+
+/**
+ * Snapshot not found
+ * (UserSnapshotService)
+ */
+export const SNAPSHOT_NOT_FOUND = 'snapshot/not_found' as const;
+

@@ -31,6 +31,7 @@ export type SettingsDef = {
   syncCollections: boolean
   syncHistory: boolean
   syncEnvironments: boolean
+  syncSnapshots: boolean
 
   PROXY_URL: string
 
@@ -85,6 +86,8 @@ export type SettingsDef = {
   EXPERIMENTAL_SCRIPTING_SANDBOX: boolean
   ENABLE_EXPERIMENTAL_MOCK_SERVERS: boolean
   ENABLE_EXPERIMENTAL_DOCUMENTATION: boolean
+
+  DIFF_AUTO_CAPTURE_COUNT: number
 }
 
 export const getDefaultSettings = (): SettingsDef => {
@@ -92,6 +95,7 @@ export const getDefaultSettings = (): SettingsDef => {
     syncCollections: true,
     syncHistory: true,
     syncEnvironments: true,
+    syncSnapshots: true,
 
     WRAP_LINES: {
       httpRequestBody: true,
@@ -144,6 +148,8 @@ export const getDefaultSettings = (): SettingsDef => {
     EXPERIMENTAL_SCRIPTING_SANDBOX: true,
     ENABLE_EXPERIMENTAL_MOCK_SERVERS: true,
     ENABLE_EXPERIMENTAL_DOCUMENTATION: true,
+
+    DIFF_AUTO_CAPTURE_COUNT: 10,
   }
 }
 

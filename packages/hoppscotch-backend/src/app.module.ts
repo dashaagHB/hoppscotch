@@ -8,6 +8,7 @@ import { UserSettingsModule } from './user-settings/user-settings.module';
 import { UserEnvironmentsModule } from './user-environment/user-environments.module';
 import { UserRequestModule } from './user-request/user-request.module';
 import { UserHistoryModule } from './user-history/user-history.module';
+import { UserSnapshotModule } from './user-snapshot/user-snapshot.module';
 import {
   subscriptionContextCookieParser,
   extractAccessTokenFromAuthRecords,
@@ -111,6 +112,7 @@ import { PublishedDocsModule } from './published-docs/published-docs.module';
     UserSettingsModule,
     UserEnvironmentsModule,
     UserHistoryModule,
+    UserSnapshotModule,
     UserRequestModule,
     TeamModule,
     TeamEnvironmentsModule,
