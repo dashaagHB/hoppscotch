@@ -1,6 +1,9 @@
 <template>
   <aside class="flex h-full justify-between md:flex-col">
-    <nav class="flex flex-1 flex-nowrap bg-primary md:flex-none md:flex-col">
+    <nav
+      class="flex flex-1 flex-nowrap bg-primary md:flex-none md:flex-col nav-container"
+      :class="EXPAND_NAVIGATION ? 'md:min-w-[160px]' : 'md:min-w-[64px]'"
+    >
       <HoppSmartLink
         v-for="(navigation, index) in primaryNavigation"
         :key="`navigation-${index}`"
@@ -18,7 +21,7 @@
         <div v-if="navigation.svg">
           <component :is="navigation.svg" class="svg-icons" />
         </div>
-        <span v-if="EXPAND_NAVIGATION" class="nav-title">
+        <span v-show="EXPAND_NAVIGATION" class="nav-title">
           {{ t(navigation.title) }}
         </span>
       </HoppSmartLink>
@@ -71,12 +74,17 @@ const primaryNavigation = [
 </script>
 
 <style lang="scss" scoped>
+.nav-container {
+  @apply md:transition-[min-width] md:duration-[250ms] md:ease-in-out;
+}
+
 .nav-link {
   @apply relative;
   @apply p-4;
   @apply flex flex-1 flex-col;
   @apply items-center;
   @apply justify-center;
+  @apply overflow-hidden;
   @apply hover:bg-primaryDark hover:text-secondaryDark;
   @apply focus-visible:text-secondaryDark;
   @apply after:absolute;
@@ -101,6 +109,8 @@ const primaryNavigation = [
   .nav-title {
     @apply mt-2;
     @apply text-tiny;
+    @apply md:transition-opacity md:duration-[250ms] md:ease-in-out;
+    @apply md:whitespace-nowrap;
   }
 
   &.router-link-active {

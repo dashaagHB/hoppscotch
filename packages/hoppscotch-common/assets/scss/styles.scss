@@ -125,6 +125,16 @@ body {
   @apply scale-95;
 }
 
+// Reduce motion for accessibility
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 50ms !important;
+    transition-duration: 50ms !important;
+  }
+}
+
 .svg-icons {
   @apply flex-shrink-0;
   @apply overflow-hidden;
